@@ -601,86 +601,105 @@
     </div>
 
     <script>
-        function openMaps() {
-            const address = "Mona city complex, Bondo Dakpara,Highway Road, Keraniganj, Dhaka, Bangladesh";
-            const encodedAddress = encodeURIComponent(address);
-            
-            if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
-                window.open(`maps://maps.google.com/maps?q=${encodedAddress}`, '_blank');
-            } else if (navigator.userAgent.match(/Android/i)) {
-                window.open(`geo:0,0?q=${encodedAddress}`, '_blank');
-            } else {
-                window.open(`https://maps.google.com/maps?q=${encodedAddress}`, '_blank');
-            }
+    document.addEventListener('DOMContentLoaded', function () {
+        const whatsappBtn = document.getElementById('whatsappBtn');
+        if (whatsappBtn) {
+            whatsappBtn.addEventListener('click', openWhatsApp);
         }
 
-        // Function to open WhatsApp chat
-        function openWhatsApp() {
-            const phoneNumber = '+8801978282819';
-            const message = encodeURIComponent("Hello! I'm interested in your services.");
-            const url = `https://wa.me/${phoneNumber}?text=${message}`;
-            window.open(url, '_blank');
+        const locationBtn = document.getElementById('locationBtn');
+        if (locationBtn) {
+            locationBtn.addEventListener('click', openMaps);
         }
 
-        // Function to save contact as vCard
-        function saveContact() {
-            const vCardData = `BEGIN:VCARD
-                              VERSION:3.0
-                              FN:Sheikh Md. Rasel
-                              ORG:R.M Traders
-                              TITLE:Founder & Managing Director
-                              TEL;TYPE=work,voice:+8801978282819
-                              EMAIL:rmtraders.steel@gmail.com
-                              ADR:;;Mona city complex, Bondo Dakpara,Highway Road, Keraniganj, Dhaka
-                              URL:https://www.google.com/maps/search/?api=1&query=Mona+city+complex,+Bondo+Dakpara,+Highway Road,+Keraniganj,+Dhaka
-                              NOTE:Importer, Manufacturer & Supplier
-                              END:VCARD`;
-    
-            const blob = new Blob([vCardData], { type: 'text/vcard' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'RM_Traders_Contact.vcf';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
-    
-            showToast("Contact saved!");
+        const contactBtn = document.getElementById('contactBtn');
+        if (contactBtn) {
+            contactBtn.addEventListener('click', saveContact);
         }
 
-        // Function to share the card using Web Share API
-        function shareCard() {
-            const shareData = {
-                title: 'R.M Traders',
-                text: 'Check out R.M Traders - Importer, Manufacturer & Supplier.',
-                url: window.location.href
-            };
-    
-            if (navigator.share) {
-                navigator.share(shareData)
-                    .then(() => showToast('Card shared successfully!'))
-                    .catch(() => showToast('Sharing cancelled or failed.'));
-            } else {
-                navigator.clipboard.writeText(shareData.url);
-                showToast('Link copied to clipboard!');
-            }
+        const shareBtn = document.getElementById('shareBtn');
+        if (shareBtn) {
+            shareBtn.addEventListener('click', shareCard);
+        }
+    });
+
+    function openMaps() {
+        const address = "Mona city complex, Bondo Dakpara,Highway Road, Keraniganj, Dhaka, Bangladesh";
+        const encodedAddress = encodeURIComponent(address);
+
+        if (navigator.userAgent.match(/iPhone|iPad|iPod/i)) {
+            window.open(`maps://maps.google.com/maps?q=${encodedAddress}`, '_blank');
+        } else if (navigator.userAgent.match(/Android/i)) {
+            window.open(`geo:0,0?q=${encodedAddress}`, '_blank');
+        } else {
+            window.open(`https://maps.google.com/maps?q=${encodedAddress}`, '_blank');
+        }
+    }
+
+    function openWhatsApp() {
+        const phoneNumber = '+8801978282819';
+        const message = encodeURIComponent("Hello! I'm interested in your services.");
+        const url = `https://wa.me/${phoneNumber}?text=${message}`;
+        window.open(url, '_blank');
+    }
+
+    function saveContact() {
+        const vCardData = `BEGIN:VCARD
+VERSION:3.0
+FN:Sheikh Md. Rasel
+ORG:R.M Traders
+TITLE:Founder & Managing Director
+TEL;TYPE=work,voice:+8801978282819
+EMAIL:rmtraders.steel@gmail.com
+ADR:;;Mona city complex, Bondo Dakpara,Highway Road, Keraniganj, Dhaka
+URL:https://www.google.com/maps/search/?api=1&query=Mona+city+complex,+Bondo+Dakpara,+Highway Road,+Keraniganj,+Dhaka
+NOTE:Importer, Manufacturer & Supplier
+END:VCARD`;
+
+        const blob = new Blob([vCardData], { type: 'text/vcard' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'RM_Traders_Contact.vcf';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        showToast("Contact saved!");
+    }
+
+    function shareCard() {
+        const shareData = {
+            title: 'R.M Traders',
+            text: 'Check out R.M Traders - Importer, Manufacturer & Supplier.',
+            url: window.location.href
+        };
+
+        if (navigator.share) {
+            navigator.share(shareData)
+                .then(() => showToast('Card shared successfully!'))
+                .catch(() => showToast('Sharing cancelled or failed.'));
+        } else {
+            navigator.clipboard.writeText(shareData.url);
+            showToast('Link copied to clipboard!');
+        }
+    }
+
+    function showToast(message) {
+        let toast = document.querySelector('.toast');
+        if (!toast) {
+            toast = document.createElement('div');
+            toast.className = 'toast';
+            document.body.appendChild(toast);
         }
 
-        // Toast message
-        function showToast(message) {
-            let toast = document.querySelector('.toast');
-            if (!toast) {
-                toast = document.createElement('div');
-                toast.className = 'toast';
-                document.body.appendChild(toast);
-            }
-    
-            toast.textContent = message;
-            toast.classList.add('show');
-    
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
+        toast.textContent = message;
+        toast.classList.add('show');
+
+        setTimeout(() => {
+            toast.classList.remove('show');
+        }, 3000);
+    }
 </script>
+
