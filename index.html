@@ -677,7 +677,7 @@ END:VCARD`;
         document.body.removeChild(a);
         URL.revokeObjectURL(url);
 
-        showToast("Contact saved!");
+        //showToast("Contact saved!");
     }
 
     function shareCard() {
@@ -693,7 +693,7 @@ END:VCARD`;
                 .catch(() => showToast('Sharing cancelled or failed.'));
         } else {
             navigator.clipboard.writeText(shareData.url);
-            showToast('Link copied to clipboard!');
+            //showToast('Link copied to clipboard!');
         }
     }
 
